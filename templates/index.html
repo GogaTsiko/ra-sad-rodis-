@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>რა? სად? როდის? — ინტელექტუალური AI კლუბი</title>
+  <meta name="description" content="ინტელექტუალური თამაშის „რა? სად? როდის?“ ელიტარული AI გუნდი: სპორტის ექსპერტი, ისტორიკოსი, ენათმეცნიერი, გეოგრაფი და გუნდის ლიდერი.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Sans+Georgian:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="icon" type="image/jpeg" href="/static/images/owl_logo.jpg">
+</head>
+<body class="dark-theme">
+  <!-- Ambient background glow & particles -->
+  <div class="bg-vignette"></div>
+  <div class="bg-table-image"></div>
+  <div class="spotlight"></div>
+
+  <!-- Header -->
+  <header class="club-header">
+    <div class="header-inner container">
+      <div class="brand">
+        <div class="owl-emblem-wrapper">
+          <img src="/static/images/owl_logo.jpg" alt="ბროლის ბუ" class="owl-emblem" id="headerOwl">
+          <div class="emblem-halo"></div>
+        </div>
+        <div class="brand-text">
+          <span class="club-badge">ელიტარული ინტელექტ-კლუბი</span>
+          <h1 class="club-title">რა? სად? როდის?</h1>
+          <p class="club-tagline">ხელოვნური ინტელექტის გუნდი და კაპიტანი</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="soundToggleBtn" class="action-pill sound-btn" title="ხმის ჩართვა/გამორთვა">
+          <span class="sound-icon">🔊</span>
+          <span class="sound-label">ხმა ჩართულია</span>
+        </button>
+        <div class="status-indicator ready" id="globalStatusPill">
+          <span class="pulse-dot"></span>
+          <span class="status-text">გუნდი მზადყოფნაშია</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Game Arena -->
+  <main class="game-arena container">
+    
+    <!-- Question Input Sector -->
+    <section class="question-sector card-luxury">
+      <div class="sector-badge-header">
+        <div class="volchok-icon-wrap" id="volchokIcon">
+          <svg viewBox="0 0 100 100" class="volchok-svg">
+            <defs>
+              <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fef08a" />
+                <stop offset="50%" stop-color="#f59e0b" />
+                <stop offset="100%" stop-color="#b45309" />
+              </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="46" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" stroke-dasharray="4 4" />
+            <polygon points="50,6 59,38 90,50 59,62 50,94 41,62 10,50 41,38" fill="url(#goldGrad)" opacity="0.85" />
+            <circle cx="50" cy="50" r="10" fill="#1e1b4b" stroke="url(#goldGrad)" stroke-width="2" />
+            <line x1="50" y1="12" x2="50" y2="2" stroke="url(#goldGrad)" stroke-width="3" stroke-linecap="round" />
+          </svg>
+        </div>
+        <div class="sector-title-box">
+          <span class="sector-label">სათამაშო მაგიდის ცენტრი</span>
+          <h2 class="sector-heading">დასვით შეკითხვა გუნდის წინაშე</h2>
+        </div>
+      </div>
+
+      <!-- Question Form -->
+      <form id="questionForm" class="question-form">
+        <div class="input-glow-frame">
+          <textarea 
+            id="questionInput" 
+            class="question-textarea" 
+            rows="3" 
+            placeholder="მაგ: რომელ წელს და რომელ ქალაქში ჩატარდა პირველი თანამედროვე ოლიმპიური თამაშები?"
+            required></textarea>
+          <div class="textarea-corner tl"></div>
+          <div class="textarea-corner tr"></div>
+          <div class="textarea-corner bl"></div>
+          <div class="textarea-corner br"></div>
+        </div>
+
+        <!-- Presets -->
+        <div class="presets-row">
+          <span class="presets-title">სწრაფი კითხვები:</span>
+          <div class="preset-chips" id="presetChips">
+            {% for p in presets %}
+            <button type="button" class="preset-chip" data-question="{{ p.question }}">
+              <span>💡</span> {{ p.title }}
+            </button>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Controls Bar -->
+        <div class="form-bottom-bar">
+          <div class="timer-display-box" id="timerBox">
+            <span class="timer-icon">⏳</span>
+            <span class="timer-text" id="timerValue">01:00</span>
+            <span class="timer-sub">განხილვის დრო</span>
+          </div>
+
+          <div class="button-group">
+            <button type="button" id="clearBtn" class="btn-secondary" title="ველის გასუფთავება">
+              გასუფთავება
+            </button>
+            <button type="submit" id="submitBtn" class="btn-primary-spin">
+              <span class="btn-spinner-icon" id="btnSpinIcon">⚙️</span>
+              <span class="btn-label">დატრიალდეს ვოლჩოკი</span>
+              <span class="btn-subtext">შეკითხვის დასმა</span>
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Progress / Deliberation bar -->
+      <div class="deliberation-progress-wrap" id="deliberationProgress">
+        <div class="progress-steps">
+          <div class="step-item" id="step1">
+            <span class="step-num">1</span>
+            <span class="step-name">კითხვა მიღებულია</span>
+          </div>
+          <div class="step-connector" id="conn1"></div>
+          <div class="step-item" id="step2">
+            <span class="step-num">2</span>
+            <span class="step-name">გუნდის ბრეინსტორმინგი</span>
+          </div>
+          <div class="step-connector" id="conn2"></div>
+          <div class="step-item" id="step3">
+            <span class="step-num">3</span>
+            <span class="step-name">კაპიტნის ვერდიქტი</span>
+          </div>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progressBarFill"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Team Members 4-Card Sector -->
+    <section class="team-sector">
+      <div class="section-headline">
+        <div class="headline-ornament left"></div>
+        <h3>გუნდის წევრების ვარაუდები და არგუმენტები</h3>
+        <div class="headline-ornament right"></div>
+      </div>
+      <p class="section-sub">თითოეული წევრი საკუთარი სპეციალიზაციის მიხედვით აანალიზებს შეკითხვას:</p>
+
+      <div class="team-grid">
+        {% for member in team %}
+        <article class="member-card" id="card-{{ member.id }}" data-member="{{ member.id }}">
+          <div class="card-glass-glow"></div>
+          <header class="member-header">
+            <div class="member-avatar-wrap">
+              <div class="member-avatar-badge">{{ member.avatar }}</div>
+              <div class="member-pulse-ring"></div>
+            </div>
+            <div class="member-meta">
+              <span class="member-badge" style="border-color: {{ member.color }}; color: {{ member.color }}">
+                {{ member.badge }}
+              </span>
+              <h4 class="member-name">{{ member.name }}</h4>
+              <p class="member-spec">{{ member.role }}</p>
+            </div>
+            <div class="member-status-chip idle" id="status-{{ member.id }}">
+              <span class="status-indicator-dot"></span>
+              <span class="status-chip-label">მოლოდინში</span>
+            </div>
+          </header>
+
+          <div class="member-body">
+            <!-- Idle Placeholder -->
+            <div class="member-placeholder" id="placeholder-{{ member.id }}">
+              <p class="placeholder-text">{{ member.desc }}</p>
+              <div class="idle-owl-feather">🪶</div>
+            </div>
+
+            <!-- Thinking Skeleton -->
+            <div class="member-thinking hidden" id="thinking-{{ member.id }}">
+              <div class="thinking-spinner"></div>
+              <p class="thinking-label">აანალიზებს საკითხს...</p>
+              <div class="skeleton-line full"></div>
+              <div class="skeleton-line med"></div>
+              <div class="skeleton-line short"></div>
+            </div>
+
+            <!-- Answer Container -->
+            <div class="member-answer-content hidden" id="answer-{{ member.id }}">
+              <div class="answer-bubble" id="text-{{ member.id }}"></div>
+            </div>
+          </div>
+
+          <footer class="member-footer">
+            <span class="member-time" id="time-{{ member.id }}">-- წმ</span>
+            <button class="copy-small-btn hidden" id="copy-{{ member.id }}" title="პასუხის კოპირება">
+              📋
+            </button>
+          </footer>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- Leader Final Answer Grand Showcase -->
+    <section class="leader-grand-stage" id="leaderStage">
+      <div class="leader-ornate-frame card-luxury">
+        <div class="leader-top-badge">
+          <div class="leader-crown-icon">👑</div>
+          <span class="leader-badge-title">გუნდის კაპიტნის ვერდიქტი</span>
+          <div class="leader-crown-icon">👑</div>
+        </div>
+
+        <div class="leader-header-profile">
+          <div class="leader-owl-portrait">
+            <img src="/static/images/owl_logo.jpg" alt="ლიდერი" class="leader-avatar-img">
+            <div class="leader-halo-glow"></div>
+          </div>
+          <div class="leader-details">
+            <h3 class="leader-title">გუნდის ლიდერი / კაპიტანი</h3>
+            <p class="leader-desc">შეაფასა 4-ვე მონაწილის მოსაზრება, შეადარა შეკითხვას და მიიღო საბოლოო გადაწყვეტილება.</p>
+          </div>
+          <div class="leader-status-chip" id="leaderStatusChip">
+            <span class="pulse-dot"></span>
+            <span id="leaderStatusText">მოლოდინში</span>
+          </div>
+        </div>
+
+        <div class="leader-content-area">
+          <!-- Leader Idle State -->
+          <div class="leader-idle-state" id="leaderIdleState">
+            <div class="table-round-wireframe">
+              <span class="wire-symbol">🦉</span>
+            </div>
+            <p>დასვით შეკითხვა და დაატრიალეთ ვოლჩოკი. გუნდის წევრების განსჯის შემდეგ აქ გამოჩნდება კაპიტნის საბოლოო პასუხი.</p>
+          </div>
+
+          <!-- Leader Thinking State -->
+          <div class="leader-thinking-state hidden" id="leaderThinkingState">
+            <div class="grand-spinner">
+              <div class="spinner-ring outer"></div>
+              <div class="spinner-ring inner"></div>
+              <span class="spinner-owl">🦉</span>
+            </div>
+            <h4>ლიდერი აჯამებს გუნდის ყველა ვერსიას...</h4>
+            <p class="thinking-quote">„ვაფასებ გუნდის წევრების ვარაუდებს, ვეძებ წინააღმდეგობებს და ვაყალიბებ ოფიციალურ პასუხს...“</p>
+          </div>
+
+          <!-- Leader Answer State -->
+          <div class="leader-verdict-box hidden" id="leaderVerdictBox">
+            <div class="verdict-banner">
+              <span class="verdict-icon">🏆</span>
+              <span class="verdict-title">რა? სად? როდის? — ოფიციალური პასუხი</span>
+            </div>
+            
+            <div class="leader-rich-text" id="leaderRichText"></div>
+
+            <!-- Accordion: view prompt sent to leader -->
+            <details class="leader-audit-details" id="leaderAuditDetails">
+              <summary class="audit-summary">
+                <span>🔍 ლიდერისთვის გადაცემული მონაცემები (Prompt & შეკრებილი ვერსიები)</span>
+                <span class="arrow-indicator">▾</span>
+              </summary>
+              <pre class="audit-code" id="leaderAuditCode"></pre>
+            </details>
+          </div>
+        </div>
+
+        <!-- Leader Footer Actions -->
+        <div class="leader-footer-actions">
+          <div class="leader-stats">
+            <span id="leaderTiming">დაყოვნება: -- წმ</span>
+            <span class="sep">•</span>
+            <span id="totalTiming">სულ: -- წმ</span>
+          </div>
+
+          <div class="action-btn-group">
+            <button type="button" class="action-btn" id="speakAnswerBtn" title="პასუხის ხმოვანი წაკითხვა">
+              🗣️ მოსმენა
+            </button>
+            <button type="button" class="action-btn" id="copyLeaderBtn" title="პასუხის კოპირება">
+              📋 კოპირება
+            </button>
+            <button type="button" class="action-btn highlight" id="askNewBtn" title="ახალი შეკითხვა">
+              ✨ ახალი შეკითხვა
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Table Roster Showcase -->
+    <section class="table-roster-section">
+      <div class="roster-headline">
+        <h4>ელიტარული გუნდის შემადგენლობა</h4>
+        <p>თითოეული აგენტი მუშაობს საკუთარი უნიკალური როლითა და ცოდნის ბაზით</p>
+      </div>
+
+      <div class="roster-list">
+        <div class="roster-item">
+          <span class="roster-avatar">👑</span>
+          <div>
+            <strong>გუნდის ლიდერი</strong>
+            <p>კრიტიკული შეფასება, ფაქტების შედარება და საბოლოო პასუხის გაცემა</p>
+          </div>
+        </div>
+        <div class="roster-item">
+          <span class="roster-avatar">⚽</span>
+          <div>
+            <strong>სპორტის ექსპერტი</strong>
+            <p>ფეხბურთი, კალათბურთი, ჩოგბურთი, ოლიმპიადები და რეკორდები</p>
+          </div>
+        </div>
+        <div class="roster-item">
+          <span class="roster-avatar">📜</span>
+          <div>
+            <strong>ისტორიკოსი</strong>
+            <p>ისტორიული მოვლენები, ქრონოლოგია, ცნობილი მოღვაწეები და ეპოქები</p>
+          </div>
+        </div>
+        <div class="roster-item">
+          <span class="roster-avatar">📖</span>
+          <div>
+            <strong>ენათმეცნიერი</strong>
+            <p>ენათმეცნიერება, ეტიმოლოგია, ლიტერატურა და ფილოლოგიური ანალიზი</p>
+          </div>
+        </div>
+        <div class="roster-item">
+          <span class="roster-avatar">🌍</span>
+          <div>
+            <strong>გეოგრაფი</strong>
+            <p>მსოფლიოს ქვეყნები, ქალაქები, მთები, მდინარეები და გეოგრაფიული ლოგიკა</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="club-footer">
+    <div class="container footer-inner">
+      <div class="footer-left">
+        <p>© 2026 „რა? სად? როდის?“ ინტელექტუალური ხელოვნური ინტელექტის გუნდი</p>
+      </div>
+      <div class="footer-right">
+        <span>Google Deepmind Gemini API • 5-აგენტიანი ორკესტრაცია</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
